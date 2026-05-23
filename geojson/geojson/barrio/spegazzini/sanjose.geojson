@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "ObRFN",
+      "properties": {
+        "name": "San José"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.601246, -34.904436],
+            [-58.595667, -34.911435],
+            [-58.60395, -34.918188],
+            [-58.607168, -34.914003],
+            [-58.601246, -34.904436]
+          ]
+        ]
+      }
+    }
+  ]
+}

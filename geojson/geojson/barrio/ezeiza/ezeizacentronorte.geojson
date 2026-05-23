@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "sEXYa",
+      "properties": {
+        "name": "ezeizacentronorte"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.51975, -34.851732],
+            [-58.524427, -34.845224],
+            [-58.533869, -34.849908],
+            [-58.528032, -34.858349],
+            [-58.51975, -34.851732]
+          ]
+        ]
+      }
+    }
+  ]
+}

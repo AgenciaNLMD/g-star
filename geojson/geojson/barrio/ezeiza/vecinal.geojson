@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "iaob5",
+      "properties": {
+        "name": "vecinal"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.524427, -34.845222],
+            [-58.52726, -34.841385],
+            [-58.536401, -34.846207],
+            [-58.533869, -34.849903],
+            [-58.524427, -34.845222]
+          ]
+        ]
+      }
+    }
+  ]
+}

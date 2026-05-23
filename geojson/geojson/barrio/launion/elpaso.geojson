@@ -1,0 +1,24 @@
+
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.55494,-34.870896],
+            [-58.560004,-34.8735],
+            [-58.555498,-34.879693],
+            [-58.55082,-34.876174],
+            [-58.55494,-34.870896]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "El Paso"
+      }
+    }
+  ]
+}

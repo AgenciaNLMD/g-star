@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.581762, -34.915275],
+            [-58.588843, -34.906095],
+            [-58.584852, -34.903105],
+            [-58.577256, -34.912883],
+            [-58.581762, -34.915275]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Tres Americas"
+      }
+    }
+  ]
+}

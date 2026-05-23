@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "x10XW",
+      "properties": {
+        "name": "Spegazzini"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.593564, -34.909788],
+            [-58.587041, -34.918123],
+            [-58.581719, -34.91531],
+            [-58.5888, -34.90606],
+            [-58.593564, -34.909788]
+          ]
+        ]
+      }
+    }
+  ]
+}

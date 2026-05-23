@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.543482,-34.864632],
+            [-58.55494,-34.870896],
+            [-58.550735,-34.876245],
+            [-58.540821,-34.868222],
+            [-58.543482,-34.864632]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Union"
+      }
+    }
+  ]
+}

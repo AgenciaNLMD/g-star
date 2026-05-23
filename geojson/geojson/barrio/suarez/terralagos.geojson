@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.542152, -34.900634],
+            [-58.525243, -34.892302],
+            [-58.514557, -34.907036],
+            [-58.531466, -34.915372],
+            [-58.542152, -34.900634]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Terralagos"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.56215, -34.885075],
+            [-58.549619, -34.895805],
+            [-58.546443, -34.894152],
+            [-58.558331, -34.881909],
+            [-58.56215, -34.885075]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Vista Alegre"
+      }
+    }
+  ]
+}

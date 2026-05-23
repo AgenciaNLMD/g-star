@@ -1,0 +1,443 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// ADMINISTRACIÓN
+// ─────────────────────────────────────────────
+
+model Usuario {
+  id                String   @id @default(cuid())
+  nombre            String
+  email             String   @unique
+  image             String?  @db.Text
+  rol               String   @default("operador")
+  estado            String   @default("activo")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  reclamosCreados   Reclamo[]
+  reclamosTomados   Reclamo[]      @relation("ReclamoTomadoPor")
+  reclamosElevados  Reclamo[]      @relation("ReclamoElevadoPor")
+  reclamoLogs       ReclamoLog[]
+  turnoLogs         TurnoLog[]
+  agendaEventos     Agenda[]
+  logsSistema       LogSistema[]
+  eapiMensajes      EapiMensaje[]
+  equipos           EquipoMiembro[]
+
+  @@map("usuarios")
+}
+
+// ─────────────────────────────────────────────
+// EQUIPOS
+// ─────────────────────────────────────────────
+
+model Equipo {
+  id          String          @id @default(cuid())
+  nombre      String
+  descripcion String?
+  color       String          @default("#5C6E85")
+  activo      Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  miembros    EquipoMiembro[]
+  reclamos    Reclamo[]
+
+  @@map("equipos")
+}
+
+model EquipoMiembro {
+  id        String   @id @default(cuid())
+  equipoId  String
+  equipo    Equipo   @relation(fields: [equipoId], references: [id], onDelete: Cascade)
+  usuarioId String
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  rol       String   @default("miembro")
+  createdAt DateTime @default(now())
+
+  @@unique([equipoId, usuarioId])
+  @@map("equipo_miembros")
+}
+
+// ─────────────────────────────────────────────
+// CONFIGURACIÓN
+// ─────────────────────────────────────────────
+
+model Entidad {
+  id               String   @id @default(cuid())
+  nombre           String
+  tipo             String   @default("municipal")
+  provincia        String   @default("")
+  partido          String   @default("")
+  localidad        String   @default("")
+  descripcion      String?  @db.Text
+  direccion        String?
+  telefono         String?
+  email            String?
+  web              String?
+  horaInicio       String   @default("08:00")
+  horaFin          String   @default("17:00")
+  intervaloMinutos Int      @default(30)
+  diasHabiles      Json     @default("[1,2,3,4,5]")
+  turnosPorDia     Int?
+  sucursales       Json?
+  redesSociales    Json?
+  activo           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  turnos           Turno[]
+
+  @@map("config_entidades")
+}
+
+model ConfigMunicipio {
+  id            String   @id @default(cuid())
+  nombre        String   @default("")
+  localidad     String   @default("")
+  provincia     String   @default("")
+  pais          String   @default("Argentina")
+  direccion     String?
+  telefono      String?
+  email         String?
+  web           String?
+  intendente    String?
+  descripcion   String?  @db.Text
+  redesSociales Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("config_municipio")
+}
+
+model Miscelanea {
+  id        String    @id @default(cuid())
+  clave     String    @unique
+  valor     String    @db.Text
+  tipo      String?
+  fecha     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@map("miscelanea")
+}
+
+// ─────────────────────────────────────────────
+// RECLAMOS
+// ─────────────────────────────────────────────
+
+model CategoriaReclamo {
+  id               String    @id @default(cuid())
+  slug             String    @unique
+  nombre           String
+  descripcion      String    @db.Text
+  palabrasClave    Json      @default("[]")
+  areaMunicipal    String    @default("")
+  prioridadDefault String    @default("media")
+  color            String    @default("#6b7280")
+  icono            String    @default("tag")
+  activo           Boolean   @default(true)
+  orden            Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  reclamos         Reclamo[]
+
+  @@map("categorias_reclamo")
+}
+
+model Reclamo {
+  id               String            @id @default(cuid())
+  numero           String            @unique
+  asunto           String
+  texto            String            @db.Text
+  estado           String            @default("entrante")
+  etiqueta         String            @default("General")
+  canal            String            @default("presencial")
+  categoriaId      String?
+  categoria        CategoriaReclamo? @relation(fields: [categoriaId], references: [id], onDelete: SetNull)
+  barrio           String            @default("")
+  localidad        String            @default("")
+  direccion        String            @default("")
+  lat              Float?
+  lng              Float?
+  esAnonimo        Boolean           @default(false)
+  contactoNombre   String            @default("")
+  contactoTelefono String            @default("")
+  contactoEmail    String            @default("")
+  usuarioId        String?
+  usuario          Usuario?          @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  tomadoPorId      String?
+  tomadoPor        Usuario?          @relation("ReclamoTomadoPor", fields: [tomadoPorId], references: [id], onDelete: SetNull)
+  tomadoAt         DateTime?
+  elevadoPorId     String?
+  elevadoPor       Usuario?          @relation("ReclamoElevadoPor", fields: [elevadoPorId], references: [id], onDelete: SetNull)
+  elevadoAt        DateTime?
+  areaDestinataria String?
+  equipoId         String?
+  equipo           Equipo?           @relation(fields: [equipoId], references: [id], onDelete: SetNull)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  logs             ReclamoLog[]
+  adjuntos         ReclamoAdjunto[]
+
+  @@map("reclamos")
+}
+
+model ReclamoLog {
+  id        String   @id @default(cuid())
+  reclamoId String
+  reclamo   Reclamo  @relation(fields: [reclamoId], references: [id], onDelete: Cascade)
+  usuarioId String?
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  accion    String
+  detalle   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@map("reclamo_logs")
+}
+
+model ReclamoAdjunto {
+  id        String   @id @default(cuid())
+  reclamoId String
+  reclamo   Reclamo  @relation(fields: [reclamoId], references: [id], onDelete: Cascade)
+  url       String   @db.Text
+  nombre    String?
+  tipo      String   @default("imagen")
+  createdAt DateTime @default(now())
+
+  @@map("reclamo_adjuntos")
+}
+
+// ─────────────────────────────────────────────
+// TURNOS
+// ─────────────────────────────────────────────
+
+model Turno {
+  id              String    @id @default(cuid())
+  entidadId       String
+  entidad         Entidad   @relation(fields: [entidadId], references: [id], onDelete: Cascade)
+  nombre          String
+  dni             String    @default("")
+  telefono        String    @default("")
+  tramite         String    @default("Trámite general")
+  sucursal        String    @default("")
+  estado          String    @default("pendiente")
+  fechaSolicitada DateTime?
+  fechaAsignada   DateTime?
+  horaAsignada    String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  logs            TurnoLog[]
+
+  @@map("turnos")
+}
+
+model TurnoLog {
+  id            String    @id @default(cuid())
+  turnoId       String
+  turno         Turno     @relation(fields: [turnoId], references: [id], onDelete: Cascade)
+  usuarioId     String?
+  usuario       Usuario?  @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  estado        String
+  fechaAsignada DateTime?
+  horaAsignada  String?
+  observaciones String?   @db.Text
+  createdAt     DateTime  @default(now())
+
+  @@map("turno_logs")
+}
+
+// ─────────────────────────────────────────────
+// AGENDA
+// ─────────────────────────────────────────────
+
+model Agenda {
+  id          String   @id @default(cuid())
+  usuarioId   String
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  titulo      String
+  descripcion String?  @db.Text
+  tipo        String   @default("evento")
+  fecha       DateTime
+  hora        String?
+  todo_dia    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("agenda")
+}
+
+// ─────────────────────────────────────────────
+// AUDITORÍA
+// ─────────────────────────────────────────────
+
+model LogSistema {
+  id        String   @id @default(cuid())
+  usuarioId String?
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  accion    String
+  modulo    String?
+  detalle   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  @@map("log_sistema")
+}
+
+// ─────────────────────────────────────────────
+// eAPI — WhatsApp
+// ─────────────────────────────────────────────
+
+model EapiContacto {
+  id           String   @id @default(cuid())
+  telefono     String   @unique
+  nombre       String?
+  flujoActual  String?
+  flujoPaso    String?
+  areaActiva   String?
+  modoBot              Boolean   @default(true)
+  resumen              String?   @db.Text
+  timeoutEsperaAt      DateTime?
+  ultimoMensajeAt      DateTime?
+  recordatorioAt       DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  @@map("eapi_contactos")
+}
+
+model EapiConversacion {
+  id             String   @id @default(cuid())
+  contactoTel    String   @unique
+  contactoNombre String?
+  noLeidos       Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  mensajes       EapiMensaje[]
+
+  @@map("eapi_conversaciones")
+}
+
+model EapiMensaje {
+  id              String           @id @default(cuid())
+  conversacionId  String
+  conversacion    EapiConversacion @relation(fields: [conversacionId], references: [id], onDelete: Cascade)
+  usuarioId       String?
+  usuario         Usuario?         @relation(fields: [usuarioId], references: [id], onDelete: SetNull)
+  texto           String           @db.Text
+  direccion       String
+  estado          String           @default("enviado")
+  createdAt       DateTime         @default(now())
+
+  @@map("eapi_mensajes")
+}
+
+// ─────────────────────────────────────────────
+// FLOWS — Motor de automatización (canal agnóstico)
+// ─────────────────────────────────────────────
+
+model Flow {
+  id          String   @id @default(cuid())
+  nombre      String
+  activo      Boolean  @default(true)
+  nodos       Json     @default("{}")
+  triggerTipo String   @default("whatsapp_entrante")
+  descripcion String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("flows")
+}
+
+model FlowCampo {
+  id           String   @id @default(cuid())
+  nombre       String   @unique
+  tipo         String   @default("texto")
+  descripcion  String?
+  valorDefault String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  valores      FlowContactoData[]
+
+  @@map("flow_campos")
+}
+
+model FlowContactoData {
+  id          String    @id @default(cuid())
+  contactoTel String
+  campoId     String
+  campo       FlowCampo @relation(fields: [campoId], references: [id], onDelete: Cascade)
+  valor       String    @db.Text
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([contactoTel, campoId])
+  @@map("flow_contacto_data")
+}
+
+model FlowConfig {
+  id            String   @id @default(cuid())
+  proveedor     String
+  apiKey        String   @db.Text
+  modelo        String?
+  sistemaPrompt String?  @db.Text
+  activo        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("flow_config")
+}
+
+model FlowAgente {
+  id                     String   @id @default(cuid())
+  nombre                 String   @unique
+  proveedor              String   @default("anthropic")
+  modelo                 String?
+  sistemaPrompt          String   @db.Text
+  conocimiento           String?  @db.Text
+  keywords               String?  @db.Text
+  herramientas           Json     @default("[]")
+  esOrquestador          Boolean  @default(false)
+  activo                 Boolean  @default(true)
+  timeoutRecordatorioMin Int      @default(10)
+  timeoutCierreMin       Int      @default(20)
+  mensajeRecordatorio    String?  @db.Text
+  mensajeCierre          String?  @db.Text
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@map("flow_agentes")
+}
+
+model ConsultaSinCobertura {
+  id            String   @id @default(cuid())
+  telefono      String
+  pregunta      String   @db.Text
+  areaDetectada String?
+  respondidoCon String?  @db.Text
+  revisada      Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  @@map("consultas_sin_cobertura")
+}
+
+model EapiTemplate {
+  id        String   @id @default(cuid())
+  nombre    String
+  texto     String   @db.Text
+  categoria String   @default("otro")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("eapi_templates")
+}

@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "xxwdk",
+      "properties": {
+        "name": "ezeizacentrosur"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.518891, -34.851116],
+            [-58.527732, -34.858155],
+            [-58.52138, -34.863539],
+            [-58.513999, -34.857733],
+            [-58.518891, -34.851116]
+          ]
+        ]
+      }
+    }
+  ]
+}

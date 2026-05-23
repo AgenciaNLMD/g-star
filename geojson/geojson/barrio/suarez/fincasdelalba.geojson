@@ -1,0 +1,23 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.524642, -34.936068],
+            [-58.510308, -34.944612],
+            [-58.513999, -34.947881],
+            [-58.526616, -34.939268],
+            [-58.524642, -34.936068]
+          ]
+        ]
+      },
+      "properties": {
+        "name": "Fincas del Alba"
+      }
+    }
+  ]
+}

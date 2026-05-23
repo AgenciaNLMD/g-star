@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "sl9YM",
+      "properties": {
+        "name": "Monte Rosa"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.599143, -34.91429],
+            [-58.589015, -34.927337],
+            [-58.582664, -34.923961],
+            [-58.593521, -34.909718],
+            [-58.599143, -34.91429]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "gGEit",
+      "properties": {
+        "name": "San Javier"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-58.599701, -34.901762],
+            [-58.593564, -34.90976],
+            [-58.590056, -34.90705],
+            [-58.595624, -34.899828],
+            [-58.599701, -34.901762]
+          ]
+        ]
+      }
+    }
+  ]
+}
