@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authConfig } from "@/lib/auth.config"
+import { auth } from "@/lib/auth"
 
 export async function GET(req) {
-  const session = await getServerSession(authConfig)
+  const session = await auth()
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { searchParams } = new URL(req.url)
